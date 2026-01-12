@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Calculator</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { max-width: 400px; }
+        input { margin: 5px; padding: 8px; width: 100%; }
+        button { padding: 10px; width: 100%; margin-top: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .result { margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tip Calculator with Arrays</h1>
+        
+        <h3>Enter Bills</h3>
+        <input type="number" id="bill1" placeholder="Bill 1" step="0.01">
+        <input type="number" id="bill2" placeholder="Bill 2" step="0.01">
+        <input type="number" id="bill3" placeholder="Bill 3" step="0.01">
+        
+        <button onclick="calculateTips()">Calculate Tips</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const calcTip = (bill) => (bill >= 50 && bill <= 300) ? bill * 0.15 : bill * 0.20;
+
+        function calculateTips() {
+            const bills = [
+                parseFloat(document.getElementById('bill1').value),
+                parseFloat(document.getElementById('bill2').value),
+                parseFloat(document.getElementById('bill3').value)
+            ];
+
+            const tips = [
+                calcTip(bills[0]),
+                calcTip(bills[1]),
+                calcTip(bills[2])
+            ];
+
+            const total = [
+                bills[0] + tips[0],
+                bills[1] + tips[1],
+                bills[2] + tips[2]
+            ];
+
+            console.log('Bills:', bills);
+            console.log('Tips:', tips);
+            console.log('Totals:', total);
+
+            let tableHTML = `
+                <table>
+                    <tr>
+                        <th>Bill</th>
+                        <th>Tip (15% or 20%)</th>
+                        <th>Total</th>
+                    </tr>
+            `;
+
+            for (let i = 0; i < bills.length; i++) {
+                tableHTML += `
+                    <tr>
+                        <td>$${bills[i].toFixed(2)}</td>
+                        <td>$${tips[i].toFixed(2)}</td>
+                        <td>$${total[i].toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+
+            tableHTML += '</table>';
+
+            document.getElementById('result').innerHTML = tableHTML;
+        }
+    </script>
+</body>
+</html>

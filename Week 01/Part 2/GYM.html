@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gymnastics Competition</title>
+    <style>
+         body { font-family: Arial; padding: 20px; }
+        .container { max-width: 400px; }
+        input { margin: 5px; padding: 8px; width: 100%; }
+        button { padding: 10px; width: 100%; margin-top: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .result { margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gymnastics Competition</h1>
+        
+        <h3>Dolphins - 3 Scores</h3>
+        <input type="number" id="d1" placeholder="Score 1" step="0.1">
+        <input type="number" id="d2" placeholder="Score 2" step="0.1">
+        <input type="number" id="d3" placeholder="Score 3" step="0.1">
+        
+        <h3>Koalas - 3 Scores</h3>
+        <input type="number" id="k1" placeholder="Score 1" step="0.1">
+        <input type="number" id="k2" placeholder="Score 2" step="0.1">
+        <input type="number" id="k3" placeholder="Score 3" step="0.1">
+        
+        <button onclick="determineWinner()">Determine Winner</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const calcAverage = (a, b, c) => (a + b + c) / 3;
+
+        const checkWinner = (avgDolphins, avgKoalas) => {
+            if (avgDolphins >= 2 * avgKoalas) {
+                console.log(`Dolphins win (${avgDolphins.toFixed(1)} vs. ${avgKoalas.toFixed(1)})`);
+                return `Dolphins win (${avgDolphins.toFixed(1)} vs. ${avgKoalas.toFixed(1)})`;
+            } else if (avgKoalas >= 2 * avgDolphins) {
+                console.log(`Koalas win (${avgKoalas.toFixed(1)} vs. ${avgDolphins.toFixed(1)})`);
+                return `Koalas win (${avgKoalas.toFixed(1)} vs. ${avgDolphins.toFixed(1)})`;
+            } else {
+                console.log(`No winner! Dolphins: ${avgDolphins.toFixed(1)}, Koalas: ${avgKoalas.toFixed(1)}`);
+                return `No winner! Dolphins: ${avgDolphins.toFixed(1)}, Koalas: ${avgKoalas.toFixed(1)}`;
+            }
+        };
+
+        function determineWinner() {
+            const d1 = parseFloat(document.getElementById('d1').value);
+            const d2 = parseFloat(document.getElementById('d2').value);
+            const d3 = parseFloat(document.getElementById('d3').value);
+
+            const k1 = parseFloat(document.getElementById('k1').value);
+            const k2 = parseFloat(document.getElementById('k2').value);
+            const k3 = parseFloat(document.getElementById('k3').value);
+
+            const avgDolphins = calcAverage(d1, d2, d3);
+            const avgKoalas = calcAverage(k1, k2, k3);
+
+            const result = checkWinner(avgDolphins, avgKoalas);
+
+            document.getElementById('result').innerHTML = `
+                <p><strong>Dolphins Average:</strong> ${avgDolphins.toFixed(1)}</p>
+                <p><strong>Koalas Average:</strong> ${avgKoalas.toFixed(1)}</p>
+                <p style="font-size: 18px; color: #28a745;"><strong>${result}</strong></p>
+            `;
+        }
+    </script>
+</body>
+</html>
