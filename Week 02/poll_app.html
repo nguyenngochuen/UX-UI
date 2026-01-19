@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poll App</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background: white; padding: 30px; max-width: 500px; width: 100%; border: 1px solid #ddd; }
+        input, textarea { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px; }
+        h2 { font-size: 18px; margin: 15px 0 10px; }
+        button { width: 100%; padding: 10px; margin-top: 10px; background: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #45a049; }
+        .poll-view { display: none; }
+        .poll-view.show { display: block; }
+        .option { padding: 10px; margin: 5px 0; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; }
+        .results { margin-top: 15px; padding: 15px; background: #f0f0f0; border-radius: 4px; display: none; }
+        .results.show { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Poll App</h2>
+        <p><strong>Question:</strong> What is your favourite programming language?</p>
+        <p><strong>Options:</strong> 0: JavaScript, 1: Python, 2: Rust, 3: C++</p>
+        
+        <h3>Initialize Answers Array</h3>
+        <input type="text" id="answersInput" placeholder="Enter numbers separated by commas (e.g., 0, 0, 0, 0)" />
+        <button onclick="initAnswers()">Initialize</button>
+        
+        <div id="pollSection" style="display:none;">
+            <div id="options"></div>
+            <button onclick="answerPoll()">Answer Poll</button>
+            <div class="results" id="results">
+                <h3>Results:</h3>
+                <p id="resultsText"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const poll = {
+            question: "What is your favourite programming language?",
+            options: ["0: JavaScript", "1: Python", "2: Rust", "3: C++"],
+            answers: null,
+            
+            registerNewAnswer() {
+                let msg = this.question + '\n\n';
+                this.options.forEach(opt => msg += opt + '\n');
+                msg += '\n(Write option number)';
+                
+                const input = prompt(msg);
+                if (input === null) return;
+                
+                const ans = Number(input);
+                if (Number.isInteger(ans) && ans >= 0 && ans < this.answers.length) {
+                    this.answers[ans]++;
+                    this.displayResults();
+                } else {
+                    alert(`Invalid! Enter 0-${this.answers.length - 1}`);
+                }
+            },
+            
+            displayResults(type = 'string') {
+                const msg = `Poll results are ${this.answers.join(', ')}`;
+                if (type === 'array') console.log(this.answers);
+                else console.log(msg);
+                
+                const resultDiv = document.getElementById('results');
+                if (resultDiv) {
+                    document.getElementById('resultsText').textContent = msg;
+                    resultDiv.classList.add('show');
+                }
+            }
+        };
+        
+        function initAnswers() {
+            const input = document.getElementById('answersInput').value.trim();
+            if (!input) {
+                alert('Please enter numbers!');
+                return;
+            }
+            
+            const nums = input.split(',').map(x => {
+                const n = Number(x.trim());
+                return Number.isInteger(n) && n >= 0 ? n : null;
+            });
+            
+            if (nums.includes(null)) {
+                alert('Invalid input! Enter numbers separated by commas (e.g., 0, 0, 0, 0)');
+                return;
+            }
+            
+            poll.answers = nums;
+            
+            // Display poll
+            document.getElementById('answersInput').style.display = 'none';
+            document.getElementById('pollSection').style.display = 'block';
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            poll.options.forEach(opt => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = opt;
+                optionsDiv.appendChild(div);
+            });
+            
+            poll.displayResults();
+        }
+        
+        function answerPoll() {
+            if (poll.answers) poll.registerNewAnswer();
+        }
+        
+        document.getElementById('answersInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') initAnswers();
+        });
+    </script>
+</body>
+</html>

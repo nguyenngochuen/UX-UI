@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underscore to CamelCase Converter</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        textarea { padding: 10px; width: 300px; height: 150px; margin-bottom: 10px; display: block; }
+        button { padding: 10px 20px; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Underscore to CamelCase Converter</h1>
+    
+    <script>
+        const textarea = document.createElement('textarea');
+        textarea.placeholder = 'Nhập các tên biến dưới dạng underscore_case, mỗi dòng một tên';
+        document.body.append(textarea);
+
+        const button = document.createElement('button');
+        button.textContent = 'Convert to CamelCase';
+        document.body.append(button);
+
+        button.addEventListener('click', () => {
+            const input = textarea.value;
+            const lines = input.split('\n');
+            lines.forEach((line, index) => {
+                const variable = line.trim();
+                if (!variable) return;
+                const words = variable.split('_');
+                let camelCase = words[0].toLowerCase();
+                for (let i = 1; i < words.length; i++) {
+                    camelCase += words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+                }
+                const checkmarks = ''.repeat(index + 1);
+                console.log(`${camelCase} ${checkmarks}`);
+            });
+        });
+        
+    </script>
+</body>
+</html>

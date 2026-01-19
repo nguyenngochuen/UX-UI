@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structure</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        button { padding: 8px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Football Betting App</h1>
+    <button onclick="displayAllResults()">Xem Tất Cả Kết Quả</button>
+    <button onclick="printGoalsExample()">Ví dụ Goals</button>
+    <!-- <button onclick="clearConsole()">Xóa Console</button> -->
+
+    <script>
+        //DỮ LIỆU
+        const game = {
+            team1: 'Bayern Munich',
+            team2: 'Borussia Dortmund',
+            players1: [
+                'Neuer', 'Pavard', 'Martinez', 'Alaba', 'Davies',
+                'Kimmich', 'Goretzka', 'Coman', 'Muller', 'Gnabry', 'Lewandowski'
+            ],
+            players2: [
+                'Burki', 'Schulz', 'Hummels', 'Akanji', 'Hakimi',
+                'Weigl', 'Witsel', 'Hazard', 'Brandt', 'Sancho', 'Gotze'
+            ],
+            odds: {
+                team1: 1.33,
+                x: 3.25,
+                team2: 6.50,
+            },
+            scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels']
+        };
+
+        // Bản đồ các sự kiện trong trò chơi
+        const gameEvents = new Map([
+            [17, 'GOAL'],
+            [36, 'Substitute'],
+            [47, 'GOAL'],
+            [61, 'Substitution'],
+            [64, 'Yellow Card'],
+            [69, 'Red Card'],
+            [70, 'Substitution'],
+            [72, 'Substitution'],
+            [76, 'GOAL'],
+            [80, 'GOAL'],
+            [92, 'Yellow Card']
+        ]);
+
+        // 1
+        const players1 = game.players1;
+        const players2 = game.players2;
+        console.log('Mảng cầu thủ của từng đội');
+        console.log('Đội 1 (Bayern Munich):', players1);
+        console.log('Đội 2 (PSG):', players2);
+
+        //  2
+        const gk = players1[0];
+        const fieldPlayers = players1.slice(1);
+        console.log('\nThủ môn và cầu thủ sân trước (Bayern Munich)');
+        console.log('Thủ môn (gk):', gk);
+        console.log('Cầu thủ sân trước (fieldPlayers):', fieldPlayers);
+
+        // 3
+        const allPlayers = [...players1, ...players2];
+        console.log('\nTất cả cầu thủ (22 cầu thủ)');
+        console.log('Số lượng:', allPlayers.length);
+        console.log(allPlayers);
+
+        //4
+        const players1Final = [...players1, 'Thiago', 'Coutinho', 'Perisic'];
+        console.log('\nĐội 1 với cầu thủ thay thế');
+        console.log('Tổng cầu thủ:', players1Final.length);
+        console.log(players1Final);
+
+        // 5
+        const [team1, x, team2] = Object.values(game.odds);
+        console.log('\nTỷ lệ cược');
+        console.log('Tỷ lệ Đội 1 (Bayern thắng):', team1);
+        console.log('Tỷ lệ Hòa (x):', x);
+        console.log('Tỷ lệ Đội 2 (PSG thắng):', team2);
+
+        // 6:
+        const printGoals = function(...players) {
+            // In tên từng cầu thủ
+            console.log(`\n Các bàn thắng`);
+            console.log(`${players.length} cầu thủ ghi bàn:`);
+            players.forEach(player => console.log(`  - ${player}`));
+            console.log(`Tổng số bàn thắng: ${players.length}`);
+        };
+
+        //7
+    console.log('\nĐội có khả năng thắng cao hơn');
+    console.log(`Tỷ lệ Đội 1: ${team1} | Tỷ lệ Đội 2: ${team2}`);
+    
+    (team1 < team2) && console.log(`${game.team1} có khả năng thắng cao hơn!`);
+    (team2 < team1) && console.log(`${game.team2} có khả năng thắng cao hơn!`);
+
+        //1
+        console.log('\n1: Danh sách các bàn thắng');
+        for (let i = 0; i < game.scored.length; i++) {
+            console.log(`Goal ${i + 1}: ${game.scored[i]}`);
+        }
+
+        // 2
+        console.log('\n 2: Tỷ lệ cược trung bình');
+        const odds = Object.values(game.odds);
+        let sum = 0;
+        for (let i = 0; i < odds.length; i++) {
+            sum += odds[i];
+        }
+        const averageOdd = sum / odds.length;
+        console.log(`Tỷ lệ cược trung bình: ${averageOdd.toFixed(2)}`);
+
+        //  3
+        console.log('\n 3: Tỷ lệ cược');
+        for (const [key, value] of Object.entries(game.odds)) {
+            const teamName = key === 'team1' ? game.team1 : key === 'team2' ? game.team2 : 'draw';
+            if (key === 'x') {
+                console.log(`Odd of ${teamName}: ${value}`);
+            } else {
+                console.log(`Odd of victory ${teamName}: ${value}`);
+            }
+        }
+
+        //  4 
+        console.log('\n  4 Object ghi bàn');
+        const scorers = {};
+        for (const player of game.scored) {
+            scorers[player] = (scorers[player] || 0) + 1;
+        }
+        console.log(scorers);
+
+     
+        
+        // 1: Tạo mảng các sự kiện duy nhất
+        console.log('\nCÔNG VỤ 1: Các sự kiện trong trò chơi (không trùng)');
+        const events = [...new Set(gameEvents.values())];
+        console.log(events);
+
+        // 2: Xóa sự kiện vàng thẻ ở phút 64
+        console.log('\nCÔNG VỤ 2: Xóa sự kiện vàng thẻ ở phút 64');
+        gameEvents.delete(64);
+        console.log('Đã xóa sự kiện từ phút 64');
+        console.log('gameEvents sau khi xóa:', gameEvents);
+
+        // 3: Tính trung bình thời gian giữa các sự kiện
+        console.log('\nCÔNG VỤ 3: Tính trung bình sự kiện trong 90 phút');
+        const avgMinutesPerEvent = 90 / gameEvents.size;
+        console.log(`An event happened, on average, every ${Math.round(avgMinutesPerEvent)} minutes`);
+
+        // 4: Lặp qua gameEvents và đánh dấu nửa đầu/nửa sau
+        console.log('\nCÔNG VỤ 4: Các sự kiện theo nửa trận đấu');
+        for (const [minute, event] of gameEvents) {
+            const half = minute <= 45 ? '[FIRST HALF]' : '[SECOND HALF]';
+            console.log(`${half} ${minute}: ${event}`);
+        }
+
+    function displayAllResults() {
+        console.clear();
+        console.log('='.repeat(60));
+        console.log('ỨNG DỤNG CƯỢC BÓNG ĐÁ');
+        console.log('='.repeat(60));
+        
+        console.log('\n Mảng cầu thủ');
+        console.table({ 'Bayern Munich': players1.length + ' cầu thủ', 'PSG': players2.length + ' cầu thủ' });
+        
+        console.log('\n Bayern Munich - Thủ môn & Sân trước');
+        console.log('Thủ môn:', gk);
+        console.log('Cầu thủ sân trước:', fieldPlayers);
+        
+        console.log('\n Tất cả cầu thủ');
+        console.log('Tổng số:', allPlayers.length, 'cầu thủ');
+        
+        console.log('\n Bayern Munich + Thay thế');
+        console.log('Tổng cầu thủ (gốc + thay thế):', players1Final.length);
+        console.log('Cầu thủ thay thế: Thiago, Coutinho, Perisic');
+        
+        console.log('\n Tỷ lệ cược');
+        console.table({
+            'Bayern Munich': team1,
+            'Hòa': x,
+            'PSG': team2
+        });
+        
+        console.log('\n Hàm printGoals');
+        printGoals('Lewandowski', 'Muller', 'Sane');
+        
+        console.log('\n Xác suất thắng');
+        (team1 < team2) && console.log(` ${game.team1} có khả năng thắng cao hơn! (Tỷ lệ: ${team1})`);
+        (team2 < team1) && console.log(`${game.team2} có khả năng thắng cao hơn! (Tỷ lệ: ${team2})`);
+        
+        console.log('\n' + '='.repeat(60));
+    }
+
+        function printGoalsExample() {
+            console.clear();
+            console.log('Ví dụ gọi hàm printGoals:');
+            printGoals('Lewandowski', 'Muller', 'Sane', 'Leroy');
+        }
+
+      
+    </script>
+</body>
+</html>
