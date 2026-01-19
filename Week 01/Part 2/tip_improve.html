@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Calculator</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { max-width: 400px; }
+        input { margin: 5px; padding: 8px; width: 100%; }
+        button { padding: 10px; width: 100%; margin-top: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .result { margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tip Calculator with Arrays & Loops</h1>
+        <p>Enter up to 10 bill amounts:</p>
+        
+        <input type="number" id="bill1" placeholder="Bill 1" step="0.01">
+        <input type="number" id="bill2" placeholder="Bill 2" step="0.01">
+        <input type="number" id="bill3" placeholder="Bill 3" step="0.01">
+        <input type="number" id="bill4" placeholder="Bill 4" step="0.01">
+        <input type="number" id="bill5" placeholder="Bill 5" step="0.01">
+        <input type="number" id="bill6" placeholder="Bill 6" step="0.01">
+        <input type="number" id="bill7" placeholder="Bill 7" step="0.01">
+        <input type="number" id="bill8" placeholder="Bill 8" step="0.01">
+        <input type="number" id="bill9" placeholder="Bill 9" step="0.01">
+        <input type="number" id="bill10" placeholder="Bill 10" step="0.01">
+        
+        <button onclick="calculateTips()">Calculate Tips</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const calcTip = (bill) => (bill >= 50 && bill <= 300) ? bill * 0.15 : bill * 0.20;
+
+       
+        const calcAverage = (arr) => {
+   
+            let sum = 0;
+            for (let i = 0; i < arr.length; i++) {
+                sum += arr[i];
+            }
+   
+            return sum / arr.length;
+        };
+
+        function calculateTips() {
+           
+            const bills = [];
+            for (let i = 1; i <= 10; i++) {
+                const value = parseFloat(document.getElementById(`bill${i}`).value);
+                if (!isNaN(value) && value > 0) {
+                    bills.push(value);
+                }
+            }
+
+            if (bills.length === 0) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Please enter at least one bill amount.</p>';
+                return;
+            }
+
+      
+            const tips = [];
+            const totals = [];
+
+            for (let i = 0; i < bills.length; i++) {
+                tips[i] = calcTip(bills[i]);
+                totals[i] = bills[i] + tips[i];
+            }
+
+            console.log('Bills:', bills);
+            console.log('Tips:', tips);
+            console.log('Totals:', totals);
+            const averageTotal = calcAverage(totals);
+            console.log('Average Total:', averageTotal);
+
+            let tableHTML = `
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <tr style="background-color: #007bff; color: white;">
+                        <th style="padding: 10px; border: 1px solid #ddd;">Bill</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Tip (15% or 20%)</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Total</th>
+                    </tr>
+            `;
+
+            for (let i = 0; i < bills.length; i++) {
+                tableHTML += `
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">$${bills[i].toFixed(2)}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">$${tips[i].toFixed(2)}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">$${totals[i].toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+
+            tableHTML += `
+                    <tr style="background-color: #e9ecef; font-weight: bold;">
+                        <td colspan="2" style="padding: 10px; border: 1px solid #ddd;">Average Total:</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">$${averageTotal.toFixed(2)}</td>
+                    </tr>
+                </table>
+            `;
+
+            document.getElementById('result').innerHTML = tableHTML;
+        }
+
+        window.addEventListener('load', calculateTips);
+    </script>
+</body>
+</html>

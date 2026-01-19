@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #222;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        .number {
+            background-color: white;
+            color: #222;
+            padding: 20px;
+            font-size: 48px;
+            font-weight: bold;
+            width: 15rem;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        input {
+            width: 200px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            width: 100px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .again {
+            background-color: #dc3545;
+            width: 150px;
+        }
+        .again:hover {
+            background-color: #c82333;
+        }
+        .message {
+            font-size: 18px;
+            margin: 20px;
+            min-height: 30px;
+        }
+        .score {
+            font-size: 16px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guessing Game</h1>
+        <button class="again">🔄 Again</button>
+        
+        <div class="number" id="number">?</div>
+        
+        <p class="message" id="message">Start guessing...</p>
+        
+        <input type="number" id="guess" placeholder="Enter your guess..." min="1" max="20">
+        <button onclick="checkGuess()">Check</button>
+        
+        <p class="score">Score: <span id="score">20</span></p>
+    </div>
+
+    <script>
+        let secretNumber = Math.trunc(Math.random() * 20) + 1;
+        let score = 20;
+
+  
+        document.querySelector('.again').addEventListener('click', function() {
+          
+            secretNumber = Math.trunc(Math.random() * 20) + 1;
+            score = 20;
+
+           
+            document.getElementById('message').textContent = 'Start guessing...';
+            document.getElementById('number').textContent = '?';
+            document.getElementById('score').textContent = score;
+            document.getElementById('guess').value = '';
+
+            document.body.style.backgroundColor = '#222';
+            document.getElementById('number').style.width = '15rem';
+            document.getElementById('guess').focus();
+        });
+
+        function checkGuess() {
+            const guess = parseInt(document.getElementById('guess').value);
+
+            if (!guess || guess < 1 || guess > 20) {
+                document.getElementById('message').textContent = 'Please enter a number between 1 and 20!';
+                return;
+            }
+
+            if (guess === secretNumber) {
+                document.getElementById('message').textContent = '✅ Correct!';
+                document.getElementById('number').textContent = secretNumber;
+                document.body.style.backgroundColor = '#27ae60';
+                document.getElementById('number').style.width = '20rem';
+                document.getElementById('score').textContent = score;
+            } else {
+                score--;
+                if (score <= 0) {
+                    document.getElementById('message').textContent = '❌ Game Over!';
+                    document.body.style.backgroundColor = '#e74c3c';
+                } else {
+                    document.getElementById('message').textContent = guess > secretNumber ? '📉 Too high!' : '📈 Too low!';
+                    document.getElementById('score').textContent = score;
+                }
+            }
+        }
+        document.getElementById('guess').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
+        });
+    </script>
+</body>
+</html>

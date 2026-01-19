@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { max-width: 500px; }
+        input { padding: 8px; width: 100%; margin-bottom: 10px; box-sizing: border-box; }
+        button { padding: 10px; width: 100%; background: #007bff; color: white; border: none; cursor: pointer; }
+        .result { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Forecast</h1>
+        <p>Enter temperatures separated by commas (e.g.: 17, 21, 23)</p>
+        <input type="text" id="tempInput" placeholder="e.g: 17, 21, 23">
+        <button onclick="handleForecast()">Show Forecast</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const printForecast = (arr) => {
+            let forecastStr = '';
+            for (let i = 0; i < arr.length; i++) {
+                forecastStr += `... ${arr[i]}°C in ${i + 1} days `;
+            }
+            forecastStr += '...';
+            
+            return forecastStr;
+        };
+
+        function handleForecast() {
+            const input = document.getElementById('tempInput').value;
+            
+            if (!input.trim()) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Please enter temperatures!</p>';
+                return;
+            }
+            const temperatures = input.split(',').map(temp => {
+                const num = parseFloat(temp.trim());
+                return isNaN(num) ? 0 : num;
+            });
+            const forecast = printForecast(temperatures);
+            document.getElementById('result').innerHTML = `<strong>Forecast:</strong><br>${forecast}`;
+            
+            console.log('Forecast:', forecast);
+        }
+    </script>
+</body>
+</html>
